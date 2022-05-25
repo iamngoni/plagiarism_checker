@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +20,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::prefix('student')->middleware('auth')->group(function () {
+    Route::get('', [StudentController::class, 'home'])->name('student.home');
+});
 
