@@ -93,7 +93,10 @@
                                     <th>Original Document</th>
                                     <th>Uploaded (For Checking)</th>
                                     <th>Processed</th>
-                                    <th>Results</th>
+                                    <th>Request For Export</th>
+                                    <th>Has Results</th>
+                                    <th>Failure Status</th>
+                                    <th>Lecturer Approved</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -103,7 +106,7 @@
                                                 {{ $file->title }}
                                             </td>
                                             <td>
-                                                <a href="{{ route('student.download', ['id' => $file->id]) }}" class="btn btn-success fw-bold text-white"><i class="fa fa-download"></i></a>
+                                                <a href="{{ route('copyleaks.download', ['id' => $file->id]) }}" class="btn btn-success fw-bold text-white"><i class="fa fa-download"></i></a>
                                             </td>
                                             <td>
                                                 @if ($file->uploaded == 1)
@@ -119,11 +122,46 @@
                                                     <span class="badge badge-pill badge-danger">not yet</span>
                                                 @endif
                                             </td>
-                                            <td>None</td>
+                                            <td>
+                                                @if ($file->requested_for_export == 1)
+                                                    <span class="badge badge-pill badge-success"><i class="fa fa-check text-white"></i></span>
+                                                @else
+                                                    @if ($file->processed == 1)
+                                                        <a href="{{ route('copyleaks.exports', ['id' => $file->id]) }}" class="btn btn-success text-white">Request For Export</a>
+                                                    @else
+                                                        <span class="badge badge-pill badge-danger">Processing Not Complete</span>
+                                                    @endif
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($file->export_html_result == null)
+                                                    <span>N/A</span>
+                                                @else
+                                                    <a href="{{ route('copyleaks.results', ['id' => $file->id]) }}">View Results</a>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($file->failed == 1)
+                                                    <span class="badge badge-pill badge-danger">Failed to Process</span>
+                                                @else
+                                                    <span class="badge badge-pill badge-success">Okay</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($file->approved == 1)
+                                                    <span class="badge badge-pill badge-success">
+                                                        <i class="fa fa-check text-white"></i>
+                                                    </span>
+                                                @else
+                                                    <span class="badge badge-pill badge-danger">
+                                                        <i class="fa fa-close text-white"></i>
+                                                    </span>
+                                                @endif
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5">No files</td>
+                                            <td colspan="8">No files</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

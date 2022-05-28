@@ -46,11 +46,23 @@ Route::any('exported', function (Request $request) {
     return response()->json(['message' => 'stuff done!'], 200);
 });
 
-Route::any('pdf-report', function (Request $request) {
+Route::any('pdf-report/{id}', function (Request $request, $id) {
     Log::info("PDF REPORT EVENT");
 
-    Log::info($request->files);
     Log::info(json_encode($request->all()));
+
+    return response()->json(['message' => 'stuff done!'], 200);
+});
+
+Route::any('crawled-report/{id}', function (Request $request, $id) {
+    Log::info("CRAWLED REPORT EVENT");
+
+    $html = $request->get("html");
+
+    $file = Files::find($id);
+
+    $file->export_html_result = $html["value"];
+    $file->save();
 
     return response()->json(['message' => 'stuff done!'], 200);
 });

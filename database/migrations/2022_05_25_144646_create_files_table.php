@@ -20,6 +20,12 @@ class CreateFilesTable extends Migration
             $table->string('path');
             $table->boolean('uploaded')->default(false);
             $table->boolean('processed')->default(false);
+            $table->boolean('failed')->default(false);
+            $table->text('failure_reason')->nullable();
+            $table->boolean('requested_for_export')->default(false);
+            $table->text('export_html_result')->nullable();
+            $table->boolean('approved')->default(false);
+            $table->double('grade', 8, 2)->nullable();
             $table->timestamps();
         });
     }

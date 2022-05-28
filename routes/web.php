@@ -16,6 +16,11 @@ Auth::routes();
 Route::prefix('student')->middleware('auth')->group(function () {
     Route::get('', [StudentController::class, 'home'])->name('student.home');
     Route::post('upload', [CopyLeaksController::class, 'uploadFile'])->name('student.upload');
-    Route::get('download/{id}', [CopyLeaksController::class, 'downloadFile'])->name('student.download');
+});
+
+Route::prefix('copyleaks')->middleware('auth')->group(function () {
+    Route::get('download/{id}', [CopyLeaksController::class, 'downloadFile'])->name('copyleaks.download');
+    Route::get('request-results/{id}', [CopyLeaksController::class, 'requestForExport'])->name('copyleaks.exports');
+    Route::get('results/{id}', [CopyLeaksController::class, 'showResults'])->name('copyleaks.results');
 });
 

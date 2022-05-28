@@ -37,6 +37,14 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Files whereUploaded($value)
  * @method static Builder|Files whereUserId($value)
  * @mixin Eloquent
+ * @property int $requested_for_export
+ * @property int|null $export_html_result
+ * @property int $approved
+ * @property float|null $grade
+ * @method static Builder|Files whereApproved($value)
+ * @method static Builder|Files whereExportHtmlResult($value)
+ * @method static Builder|Files whereGrade($value)
+ * @method static Builder|Files whereRequestedForExport($value)
  */
 class Files extends Model
 {
