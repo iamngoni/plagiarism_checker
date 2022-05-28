@@ -1,21 +1,13 @@
 <?php
 
+use App\Http\Controllers\CopyLeaksController;
 use App\Http\Controllers\StudentController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Auth::routes();
@@ -23,5 +15,7 @@ Auth::routes();
 
 Route::prefix('student')->middleware('auth')->group(function () {
     Route::get('', [StudentController::class, 'home'])->name('student.home');
+    Route::post('upload', [CopyLeaksController::class, 'uploadFile'])->name('student.upload');
+    Route::get('download/{id}', [CopyLeaksController::class, 'downloadFile'])->name('student.download');
 });
 

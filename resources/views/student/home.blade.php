@@ -82,15 +82,16 @@
                 <div class="card">
                     <div class="card-header">
                         Student Files
-                        <button class="float-right btn btn-success text-bold">Upload File</button>
+                        <button class="float-right btn btn-success fw-bold" data-toggle="modal" data-target="#file-upload-modal">Upload Document</button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-borderless">
+                            <table class="table table-borderless table-striped">
                                 <thead>
                                 <tr class="text-uppercase font-size-11 text-muted">
                                     <th>Title</th>
-                                    <th>Uploaded</th>
+                                    <th>Original Document</th>
+                                    <th>Uploaded (For Checking)</th>
                                     <th>Processed</th>
                                     <th>Results</th>
                                 </tr>
@@ -101,15 +102,28 @@
                                             <td>
                                                 {{ $file->title }}
                                             </td>
-                                            <td>False</td>
                                             <td>
-                                                False
+                                                <a href="{{ route('student.download', ['id' => $file->id]) }}" class="btn btn-success fw-bold text-white"><i class="fa fa-download"></i></a>
+                                            </td>
+                                            <td>
+                                                @if ($file->uploaded == 1)
+                                                    <span class="badge badge-pill badge-success">uploaded</span>
+                                                @else
+                                                    <span class="badge badge-pill badge-danger">not yet</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($file->processed == 1)
+                                                    <span class="badge badge-pill badge-success">processed</span>
+                                                @else
+                                                    <span class="badge badge-pill badge-danger">not yet</span>
+                                                @endif
                                             </td>
                                             <td>None</td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4">No files</td>
+                                            <td colspan="5">No files</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -121,7 +135,32 @@
         </div>
 
     </main>
-    <!-- end::main content -->
+
+    <div class="modal" id="file-upload-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Upload Document</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ route('student.upload') }}" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group">
+                            <label for="title">Document Title</label>
+                            <input type="text" class="form-control" name="title" id="title" required placeholder="e.g. Analysis of Algorithms">
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Document (word | pdf)</label>
+                            <input type="file" name="document" id="title" required>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-success fw-bold">Upload</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="colors"> <!-- To use theme colors with Javascript -->
         <div class="bg-primary"></div>
