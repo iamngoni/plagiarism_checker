@@ -54,8 +54,18 @@ Route::any('pdf-report/{id}', function (Request $request, $id) {
     return response()->json(['message' => 'stuff done!'], 200);
 });
 
+Route::any('results-report/{id}/{resultsId}', function (Request $request, $id) {
+    Log::info("Results REPORT EVENT");
+
+    Log::info(json_encode($request->all()));
+
+    return response()->json(['message' => 'stuff done!'], 200);
+});
+
 Route::any('crawled-report/{id}', function (Request $request, $id) {
     Log::info("CRAWLED REPORT EVENT");
+
+    Log::info(json_encode($request->all()));
 
     $html = $request->get("html");
 

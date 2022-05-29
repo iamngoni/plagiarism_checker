@@ -2,9 +2,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Student Dashboard</title>
 
-    <!-- Favicon -->
+    @if (Auth::user()->role == 'student')
+        <title>Student Dashboard</title>
+    @else
+        <title>Lecturer Dashboard</title>
+    @endif
+        <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('assets/media/image/favicon.png') }}"/>
 
     <!-- Plugin styles -->

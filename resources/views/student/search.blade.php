@@ -10,73 +10,6 @@
 
     <!-- begin::main content -->
     <main class="main-content">
-
-        <div class="row">
-            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h2 class="font-weight-bold mb-2">{{ $allFiles }}</h2>
-                                <h6 class="text-uppercase font-size-11 mb-2 text-primary font-weight-bold">Files Uploaded</h6>
-                                <p class="m-0 small text-muted">Plagiarism Checker.</p>
-                            </div>
-                            <div>
-                                <span class="dashboard-pie-1">2/5</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h2 class="font-weight-bold mb-2">{{ $processed }}</h2>
-                                <h6 class="text-uppercase font-size-11 mb-2 text-success font-weight-bold">Processed Uploads</h6>
-                                <p class="m-0 small text-muted">Plagiarism Checker.</p>
-                            </div>
-                            <div>
-                                <span class="dashboard-pie-2">4/5</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h2 class="font-weight-bold mb-2">{{ $pending }}</h2>
-                                <h6 class="text-uppercase font-size-11 mb-2 text-warning font-weight-bold">Pending Processing</h6>
-                                <p class="m-0 small text-muted">Plagiarism Checker.</p>
-                            </div>
-                            <div>
-                                <span class="dashboard-pie-3">1/5</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h2 class="font-weight-bold mb-2">0</h2>
-                                <h6 class="text-uppercase font-size-11 mb-2 text-info font-weight-bold">Processing Failed</h6>
-                                <p class="m-0 small text-muted">Plagiarism Checker.</p>
-                            </div>
-                            <div>
-                                <span class="dashboard-pie-4">2/5</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -86,17 +19,14 @@
                                 <h6>Looking for past papers 🤲? We've got you covered here 👉</h6>
                             </div>
                             <div class="col-md-6">
-                                <form action="{{ route('student.search') }}" method="POST">
-                                    @csrf
-                                    <div class="row float-right">
-                                        <div class="col-md-7">
-                                            <input type="text" name="query" class="form-control" placeholder="Analysis of Algorithms using AI">
-                                        </div>
-                                        <div class="col-md-5">
-                                            <input type="submit" value="Search" class="btn btn-success">
-                                        </div>
+                                <div class="row float-right">
+                                    <div class="col-md-7">
+                                        <input type="text" name="query" value="{{ $query }}" class="form-control" placeholder="Analysis of Algorithms using AI">
                                     </div>
-                                </form>
+                                    <div class="col-md-5">
+                                        <input type="submit" value="Search" class="btn btn-success">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -107,7 +37,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        Student Files
+                        {{ $query }} | Related Files
                         <button class="float-right btn btn-success fw-bold" data-toggle="modal" data-target="#file-upload-modal">Upload Document</button>
                     </div>
                     <div class="card-body">

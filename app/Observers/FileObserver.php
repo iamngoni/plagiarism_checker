@@ -61,7 +61,7 @@ class FileObserver
                     "filename" => end($nameOfFileWithExtension),
                     "properties" => [
                         "webhooks" => [
-                            "status" => "https://3516-196-41-88-253.ngrok.io/api/scanned"
+                            "status" => env("NGROK_URL") . "/api/scanned"
                         ],
                         "includeHtml" => true,
                         "sandbox" => false,

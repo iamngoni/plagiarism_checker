@@ -5,25 +5,12 @@ namespace App\Http\Controllers;
 use App\DTOs\CopyLeaksAuthResponse;
 use App\Models\Export;
 use App\Models\Files;
-use Copyleaks\Copyleaks;
-use Copyleaks\CopyleaksFileSubmissionModel;
-use Copyleaks\SubmissionActions;
-use Copyleaks\SubmissionAuthor;
-use Copyleaks\SubmissionExclude;
-use Copyleaks\SubmissionFilter;
-use Copyleaks\SubmissionIndexing;
-use Copyleaks\SubmissionPDF;
-use Copyleaks\SubmissionProperties;
-use Copyleaks\SubmissionRepository;
-use Copyleaks\SubmissionScanning;
-use Copyleaks\SubmissionScanningCopyleaksDB;
-use Copyleaks\SubmissionScanningExclude;
-use Copyleaks\SubmissionWebhooks;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class CopyLeaksController extends Controller
@@ -76,17 +63,26 @@ class CopyLeaksController extends Controller
                 $export->file_id = $file->id;
                 $export->save();
 
+                $resultsId = uniqid();
+
                 $data = [
-                    "completionWebhook" => "https://3516-196-41-88-253.ngrok.io/api/exported",
+                    "completionWebhook" => env("NGROK_URL") . "/api/exported",
+//                    "results" => [
+//                        "id" => $resultsId,
+//                        "verb" => "POST",
+//                        "endpoint" => env("NGROK_URL") . "/api/results-report/" . $file->id . "/" . $resultsId,
+//                    ],
                     "pdfReport" => [
                         "verb" => "POST",
-                        "endpoint" => "https://3516-196-41-88-253.ngrok.io/api/pdf-report/". $file->id,
+                        "endpoint" => env("NGROK_URL") . "/api/pdf-report/". $file->id,
                     ],
                     "crawledVersion" => [
                         "verb" => "POST",
-                        "endpoint" => "https://3516-196-41-88-253.ngrok.io/api/crawled-report/" . $file->id,
-                    ]
+                        "endpoint" => env("NGROK_URL") . "/api/crawled-report/" . $file->id,
+                    ],
                 ];
+
+                Log::info(json_encode($data));
 
                 $response = Http::withHeaders([
                     "Content-Type"=> "application/json",
@@ -97,6 +93,7 @@ class CopyLeaksController extends Controller
                     DB::commit();
                     return back()->with('success', ["message" => "Requested for results successfully"]);
                 } else {
+                    dd($response);
                     throw new Exception("Failed to request for results");
                 }
             } else {
