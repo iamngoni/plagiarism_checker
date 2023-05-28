@@ -35,11 +35,7 @@ class RegisterController extends Controller
     public function redirectTo() {
         $user = Auth::user();
 
-        if ($user->role == 'student') {
-            $this->redirectTo = '/student';
-        } else {
-            $this->redirectTo = '/lecturer';
-        }
+        $this->redirectTo = '/student';
 
         return $this->redirectTo;
     }
