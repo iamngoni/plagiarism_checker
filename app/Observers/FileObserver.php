@@ -7,7 +7,7 @@ use App\Models\Files;
 use Exception;
 use Http;
 use Illuminate\Support\Facades\Storage;
-use Log;
+use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpWord\IOFactory;
 
 class FileObserver
@@ -49,6 +49,7 @@ class FileObserver
             ]);
 
             if ($authResponse->status() == 200) {
+                Log::info("Authenticated with Copyleaks");
                 $copyLeaksAuthResponse = new CopyLeaksAuthResponse($authResponse->json());
 
                 $nameOfFileWithExtension = explode("/", $file->path);
@@ -60,6 +61,7 @@ class FileObserver
                     "base64" => $base64File,
                     "filename" => end($nameOfFileWithExtension),
                     "properties" => [
+                        "action" => 0,
                         "webhooks" => [
                             "status" => env("NGROK_URL") . "/api/scanned"
                         ],
@@ -71,9 +73,12 @@ class FileObserver
                         "pdf" => [
                             "create" => true,
                             "title" => $file->title,
+                            "version" => 2
                         ]
                     ],
                 ];
+
+                Log::info(json_encode($data));
 
                 $copyLeaksScanUploadResponse = Http::withHeaders([
                     "Content-Type" => "application/json",
@@ -81,9 +86,12 @@ class FileObserver
                 ])->put("https://api.copyleaks.com/v3/scans/submit/file/scan_" . $file->id, $data);
 
                 if ($copyLeaksScanUploadResponse->status() == 201) {
+                    Log::info("File scan uploaded");
                     $file->uploaded = true;
                     $file->save();
                 } else {
+                    Log::info("Failed to upload scan");
+                    Log::info($copyLeaksScanUploadResponse->status());
                     throw new Exception("Failed to upload scan");
                 }
             } else {

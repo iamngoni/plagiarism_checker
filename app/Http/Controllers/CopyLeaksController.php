@@ -12,9 +12,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Throwable;
 
 class CopyLeaksController extends Controller
 {
+    /**
+     * @throws Throwable
+     */
     public function uploadFile(Request $request) {
         DB::beginTransaction();
         try {
@@ -39,11 +44,15 @@ class CopyLeaksController extends Controller
         }
     }
 
-    public function downloadFile($id) {
+    public function downloadFile($id): StreamedResponse
+    {
         $file = Files::find($id);
         return Storage::download($file->path);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function requestForExport ($id) {
         DB::beginTransaction();
         try {
@@ -63,15 +72,8 @@ class CopyLeaksController extends Controller
                 $export->file_id = $file->id;
                 $export->save();
 
-                $resultsId = uniqid();
-
                 $data = [
                     "completionWebhook" => env("NGROK_URL") . "/api/exported",
-//                    "results" => [
-//                        "id" => $resultsId,
-//                        "verb" => "POST",
-//                        "endpoint" => env("NGROK_URL") . "/api/results-report/" . $file->id . "/" . $resultsId,
-//                    ],
                     "pdfReport" => [
                         "verb" => "POST",
                         "endpoint" => env("NGROK_URL") . "/api/pdf-report/". $file->id,

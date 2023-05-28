@@ -3,7 +3,6 @@
 namespace App\DTOs;
 
 class CopyLeaksAuthResponse {
-
     private $accessToken;
     private $issuedAt;
     private $expiresAt;

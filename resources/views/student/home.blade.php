@@ -152,6 +152,7 @@
                                                 @if ($file->requested_for_export == 1)
                                                     <span class="badge badge-pill badge-success"><i class="fa fa-check text-white"></i></span>
                                                 @else
+
                                                     @if ($file->processed == 1)
                                                         <a href="{{ route('copyleaks.exports', ['id' => $file->id]) }}" class="btn btn-success text-white">Request For Export</a>
                                                     @else
