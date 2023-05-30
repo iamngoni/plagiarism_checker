@@ -48,24 +48,24 @@ Route::any('exported', function (Request $request) {
 
 Route::any('pdf-report/{id}', function (Request $request, $id) {
     Log::info("PDF REPORT EVENT");
-    foreach ($request->all() as $key) {
-        Log::info('Key: ' . $key);
-    }
-    $files = $request->allFiles();
-    Log::info('Checking for files existence');
-    // Process the files
-    foreach ($files as $file) {
-        Log::info('Found file.');
-        // Check if the file is a PDF
-        if ($file->getClientOriginalExtension() === 'pdf' || $file->getMimeType() === 'application/pdf') {
-            Log::info('File matches pdf format');
-            // The file is a PDF, save it to the desired location
-            $filename = $file->getClientOriginalName();
-            Log::info('File Name: ' . $filename);
-            $file->move(storage_path('app/exports'), $filename);
-            Log::info('File moved to exports');
-            // Perform any additional processing here
-        }
+    Log::info($request->header('Content-Type'));
+    
+    $requestBody = $request->getContent();
+    
+    // Check if the response body is PDF content
+    if ($request->header('Content-Type') === 'application/pdf') {
+        // Generate a unique file name
+        $fileName = $id . '.pdf';
+        
+        // Define the path where you want to save the PDF file
+        $path = 'exports/' . $fileName;
+        
+        // Save the request body (PDF content) to the file
+        Storage::disk('local')->put($path, $requestBody);
+        
+        // Perform any additional actions you need with the saved PDF
+        
+        return response()->json(['message' => 'PDF saved successfully']);
     }
 
     return response()->json();
